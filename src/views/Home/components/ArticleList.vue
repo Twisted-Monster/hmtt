@@ -9,7 +9,12 @@
     @load="onLoad"
     :immediate-check="false"
     offset="50">
-      <article-item v-for="obj in list" :key="obj.art_id" :artObj="obj"></article-item>
+      <article-item
+      v-for="obj in list"
+      :key="obj.art_id"
+      :artObj="obj"
+      @dislike="dislikeFn"
+      @report="reportsFn"></article-item>
     </van-list>
     </van-pull-refresh>
   </div>
@@ -17,7 +22,8 @@
 
 <script>
 import ArticleItem from './ArticleItem'
-import { getAllArticleListAPI } from '@/api'
+import { getAllArticleListAPI, dislikeArticleAPI, reportArticleAPI } from '@/api'
+import { Notify } from 'vant'
 
 // 问题1：网页刚打开，created里请求和onload里请求同时发送，请求的都是最新数据
 // onload中把两次一样的数据合并，造成数据重复导致key重复
@@ -78,6 +84,36 @@ export default {
       }
       // 顶部加载状态改为false
       this.isLoading = false
+    },
+    // 反馈-不感兴趣
+    async dislikeFn (obj) {
+      // 如果用try+catch自己处理错误，内部throw就不会向控制台抛出打印错误，而是交给你的catch内自定义错误
+      // try+catch捕获同步代码的异常
+      try {
+        const res = await dislikeArticleAPI({
+          target: obj.art_id
+        })
+        console.log(res)
+        Notify({ type: 'success', message: '反馈成功' })
+      } catch (err) {
+        console.log(err)
+        Notify({ type: 'warning', message: '反馈失败' })
+      }
+    },
+    // 反馈-举报
+    async reportsFn (obj, type) {
+      try {
+        const res = await reportArticleAPI({
+          target: obj.art_id,
+          type: type,
+          remark: '就是其他问题'
+        })
+        console.log(res)
+        Notify({ type: 'success', message: '举报成功' })
+      } catch (err) {
+        console.log(err)
+        Notify({ type: 'warning', message: '举报失败' })
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
-  <!-- 一条文章单元格 -->
+<div>
+    <!-- 一条文章单元格 -->
   <van-cell>
     <!-- 标题区域的插槽 -->
     <template #title>
@@ -25,20 +26,73 @@
           <span>{{formateTime(artObj.pubdate)}}</span>
         </div>
         <!-- 反馈按钮 -->
-        <van-icon name="cross" />
+        <van-icon name="cross" @click="show = true"/>
       </div>
     </template>
   </van-cell>
+  <!-- 反馈面板 -->
+  <!-- 弹出层默认挂载到组件所在位置，可以通过 get-container 属性指定挂载位置。 -->
+  <van-action-sheet
+  v-model="show"
+  :actions="actions"
+  @select="onSelect"
+  @cancel="cancelFn"
+  @close="closeFn"
+  get-container="body"
+  :cancel-text="bottomText"/>
+</div>
 </template>
 
 <script>
+// 目标1：点击”反馈垃圾内容“数据的切换
+// 1.监听点击事件，区分用户点击的是哪一个
+// 2.切换actions数组里数据
+
+// 目标2：二级反馈数据出现，取消按钮的文字要换成”返回“
 import { timeAgo } from '@/utils/date'
+import { firstActions, secondActions } from '@/api/reports'
 export default {
   props: {
     artObj: Object // 文章对象
   },
   methods: {
-    formateTime: timeAgo
+    formateTime: timeAgo,
+    onSelect (action) {
+      // 默认情况下点击选项时不会自动收起
+      // 可以通过 close-on-click-action 属性开启自动收起
+      if (action.name === '反馈垃圾内容') {
+        this.actions = secondActions
+        this.bottomText = '返回'
+      } else if (action.name === '不感兴趣') {
+        // 子向父传值
+        this.$emit('dislike', this.artObj)
+        this.show = false // 关闭弹窗
+      } else { // 这里就是二级反馈
+        this.$emit('report', this.artObj, action.value) // 外面需要反馈类型的值
+        this.actions = firstActions
+        this.show = false
+      }
+    },
+    // 底部按钮点击事件
+    cancelFn () {
+      if (this.bottomText === '返回') {
+        this.show = true
+        this.actions = firstActions
+        this.bottomText = '取消'
+      }
+    },
+    // 关闭面板-触发事件
+    closeFn () {
+      this.actions = firstActions
+      this.bottomText = '取消'
+    }
+  },
+  data () {
+    return {
+      show: false, // 折叠面板显示或隐藏
+      actions: firstActions,
+      bottomText: '取消'
+    }
   }
 }
 </script>
