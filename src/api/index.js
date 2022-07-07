@@ -28,6 +28,23 @@ export const getUSerChannelsAPI = () => request({
   url: '/v1_0/user/channels'
 })
 
+// 频道--更新覆盖已选
+export const updateChannelsAPI = ({ channels }) => {
+  return request({
+    url: '/v1_0/user/channels',
+    method: 'PUT',
+    data: {
+      channels
+    }
+  })
+}
+
+// 频道--删除指定用户的频道
+export const removeTheChannelAPI = ({ channelId }) => request({
+  url: `/v1_0/user/channels/${channelId}`,
+  method: 'DELETE'
+})
+
 // 文章--获取文章列表
 export const getAllArticleListAPI = ({ channel_id, timestamp }) =>
   request({

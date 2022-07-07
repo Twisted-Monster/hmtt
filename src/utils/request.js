@@ -18,7 +18,6 @@ axios.interceptors.request.use(function (config) {
   // 如果getToken()在原地有值token字符串，才能调用length获取长度
   if (getToken()?.length > 0 && config.headers.Authorization === undefined) {
     config.headers.Authorization = `Bearer ${getToken()}`
-    console.log(config)
   }
   return config
 }, function (error) {
