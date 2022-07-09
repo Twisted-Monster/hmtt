@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ArticleItem from './ArticleItem'
+import ArticleItem from '@/components/ArticleItem'
 import { getAllArticleListAPI, dislikeArticleAPI, reportArticleAPI } from '@/api'
 import { Notify } from 'vant'
 

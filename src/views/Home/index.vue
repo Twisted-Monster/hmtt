@@ -7,7 +7,7 @@
           <img class="logo" src="@/assets/toutiao_logo.png" />
         </template>
         <template #right>
-          <van-icon name="search" size="0.48rem" color="#fff" />
+          <van-icon name="search" size="0.48rem" color="#fff" @click="moveSearchPageFn" />
         </template>
       </van-nav-bar>
     </div>
@@ -119,6 +119,10 @@ export default {
          如果是在普通的DOM元素上使用，引用指向的就是 DOM 元素，如果是在子组件上，引用就指向组件的实例。
          $refs 是一个对象，持有已注册过 ref 的所有的子组件。 */
       this.$refs.editRef.isEdit = false
+    },
+    // 首页-右上角放大镜点击事件->跳转到搜索界面
+    moveSearchPageFn () {
+      this.$router.push('/search')
     }
   },
   computed: {

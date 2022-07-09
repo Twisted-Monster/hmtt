@@ -1,46 +1,41 @@
 <template>
-<div>
+  <div>
     <!-- 一条文章单元格 -->
-  <van-cell>
-    <!-- 标题区域的插槽 -->
-    <template #title>
-      <div class="title-box">
-        <!-- 标题 -->
-        <span>{{artObj.title}}</span>
-        <!-- 单图 -->
-        <img v-if="artObj.cover.type === 1"
-        :src="artObj.cover.images[0]" alt="" class="thumb">
-      </div>
-      <!-- 多图 -->
-      <div class="thumb-box"
-      v-if="artObj.cover.type > 1">
-        <img :src="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
-      </div>
-    </template>
-    <!-- label 区域的插槽 -->
-    <template #label>
-      <div class="label-box">
-        <div>
-          <span>{{artObj.aut_name}}</span>
-          <span>{{artObj.comm_count}}</span>
-          <span>{{formateTime(artObj.pubdate)}}</span>
+    <van-cell>
+      <!-- 标题区域的插槽 -->
+      <template #title>
+        <div class="title-box">
+          <!-- 标题 -->
+          <span>{{artObj.title}}</span>
+          <!-- 单图 -->
+          <van-image v-if="artObj.cover.type === 1" :src="artObj.cover.images[0]" alt="" class="thumb">
+            <template v-slot:error>加载失败</template>
+          </van-image>
         </div>
-        <!-- 反馈按钮 -->
-        <van-icon name="cross" @click="show = true"/>
-      </div>
-    </template>
-  </van-cell>
-  <!-- 反馈面板 -->
-  <!-- 弹出层默认挂载到组件所在位置，可以通过 get-container 属性指定挂载位置。 -->
-  <van-action-sheet
-  v-model="show"
-  :actions="actions"
-  @select="onSelect"
-  @cancel="cancelFn"
-  @close="closeFn"
-  get-container="body"
-  :cancel-text="bottomText"/>
-</div>
+        <!-- 多图 -->
+        <div class="thumb-box" v-if="artObj.cover.type > 1">
+          <van-image :src="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
+            <template v-slot:error>加载失败</template>
+          </van-image>
+        </div>
+      </template>
+      <!-- label 区域的插槽 -->
+      <template #label>
+        <div class="label-box">
+          <div>
+            <span>{{artObj.aut_name}}</span>
+            <span>{{artObj.comm_count}}</span>
+            <span>{{formateTime(artObj.pubdate)}}</span>
+          </div>
+          <!-- 反馈按钮 -->
+          <van-icon name="cross" @click="show = true" v-if="isShow" />
+        </div>
+      </template>
+    </van-cell>
+    <!-- 反馈面板 -->
+    <!-- 弹出层默认挂载到组件所在位置，可以通过 get-container 属性指定挂载位置。 -->
+    <van-action-sheet v-model="show" :actions="actions" @select="onSelect" @cancel="cancelFn" @close="closeFn" get-container="body" :cancel-text="bottomText" />
+  </div>
 </template>
 
 <script>
@@ -53,7 +48,11 @@ import { timeAgo } from '@/utils/date'
 import { firstActions, secondActions } from '@/api/reports'
 export default {
   props: {
-    artObj: Object // 文章对象
+    artObj: Object, // 文章对象
+    isShow: { // 控制x是否显示
+      type: Boolean,
+      default: true // 首页之类的地方不想再做修改，首页没传值进来所以默认显示
+    }
   },
   methods: {
     formateTime: timeAgo,

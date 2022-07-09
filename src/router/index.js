@@ -4,6 +4,9 @@ import Login from '@/views/Login'
 import Layout from '@/views/Layout'
 import Home from '@/views/Home'
 import User from '@/views/User'
+import Search from '@/views/Search'
+import SearchResult from '@/views/Search/SearchResult'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -29,6 +32,15 @@ const routes = [
         component: User
       }
     ]
+  },
+  {
+    path: '/search',
+    component: Search
+  },
+  {
+    // 搜索结果页
+    path: '/search_result/:kw',
+    component: SearchResult
   }
 ]
 

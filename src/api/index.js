@@ -55,7 +55,7 @@ export const getAllArticleListAPI = ({ channel_id, timestamp }) =>
     }
   })
 
-// 文章 - 不感兴趣
+// 文章--不感兴趣
 export const dislikeArticleAPI = ({ target }) => {
   return request({
     url: '/v1_0/article/dislikes',
@@ -65,7 +65,7 @@ export const dislikeArticleAPI = ({ target }) => {
     }
   })
 }
-// 文章 - 举报
+// 文章--举报
 export const reportArticleAPI = ({ target, type, remark }) => {
   return request({
     url: '/v1_0/article/reports',
@@ -77,3 +77,17 @@ export const reportArticleAPI = ({ target, type, remark }) => {
     }
   })
 }
+// 搜索--联想菜单列表
+export const suggestListAPI = ({ keywords }) => request({
+  url: '/v1_0/suggestion',
+  params: {
+    q: keywords
+  }
+})
+// 搜索--搜索结果列表
+export const searchResultAPI = ({ page = 1, per_page = 10, q }) => request({
+  url: '/v1_0/search',
+  params: {
+    page, per_page, q // page:页数，不传默认为1 per_page:每页数量，不传每页数量由后端决定 q:搜索关键词
+  }
+})
