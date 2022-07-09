@@ -15,7 +15,19 @@ export const loginAPI = ({ mobile, code }) => {
     }
   })
 }
-
+// 用户--关注
+export const userFollowedAPI = ({ userId }) => request({
+  url: '/v1_0/user/followings',
+  method: 'POST',
+  data: {
+    target: userId
+  }
+})
+// 用户--取关
+export const userUnFollowedAPI = ({ userId }) => request({
+  url: `/v1_0/user/followings/${userId}`,
+  method: 'DeLETE'
+})
 // 频道--获取所有频道
 export const getAllChannelsAPI = () =>
   request({
@@ -77,6 +89,23 @@ export const reportArticleAPI = ({ target, type, remark }) => {
     }
   })
 }
+// 文章--获取详情
+export const detailAPI = ({ artId }) => request({
+  url: `/v1_0/articles/${artId}`
+})
+// 文章--点赞
+export const likeArticleAPI = ({ artId }) => request({
+  url: '/v1_0/article/likings',
+  method: 'POST',
+  data: {
+    target: artId
+  }
+})
+// 文章--取消点赞
+export const unLikeArticleAPI = ({ artId }) => request({
+  url: `/v1_0/article/likings/${artId}`,
+  method: 'DELETE'
+})
 // 搜索--联想菜单列表
 export const suggestListAPI = ({ keywords }) => request({
   url: '/v1_0/suggestion',

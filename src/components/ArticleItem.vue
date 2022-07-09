@@ -28,7 +28,8 @@
             <span>{{formateTime(artObj.pubdate)}}</span>
           </div>
           <!-- 反馈按钮 -->
-          <van-icon name="cross" @click="show = true" v-if="isShow" />
+          <!-- @click.stop阻止点击事件冒泡到父级执行跳转 -->
+          <van-icon name="cross" @click.stop="show = true" v-if="isShow" />
         </div>
       </template>
     </van-cell>
@@ -55,7 +56,8 @@ export default {
     }
   },
   methods: {
-    formateTime: timeAgo,
+    formateTime: timeAgo, // 函数体是timeago
+    // 反馈面板-"选项"选择事件
     onSelect (action) {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
@@ -72,7 +74,7 @@ export default {
         this.show = false
       }
     },
-    // 底部按钮点击事件
+    // 反馈面板-底部按钮-点击事件
     cancelFn () {
       if (this.bottomText === '返回') {
         this.show = true
@@ -80,7 +82,7 @@ export default {
         this.bottomText = '取消'
       }
     },
-    // 关闭面板-触发事件
+    // 反馈面板-关闭面板-触发事件
     closeFn () {
       this.actions = firstActions
       this.bottomText = '取消'

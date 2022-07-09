@@ -12,7 +12,8 @@ module.exports = defineConfig({
             'border-color': '#eee',
             'nav-bar-background-color': '#007bff',
             'nav-bar-title-text-color': '#fff',
-            'tabs-bottom-bar-color': '#007bff'
+            'tabs-bottom-bar-color': '#007bff',
+            'nav-bar-icon-color': '#fff'
           }
         }
       }

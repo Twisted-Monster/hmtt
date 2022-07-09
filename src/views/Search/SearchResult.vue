@@ -8,7 +8,14 @@
     <!-- 文章列表 -->
     <div>
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
-        <ArticleItem v-for="obj in articleList" :key="obj.id" :artObj="obj" :isShow="false"></ArticleItem>
+        <!-- ArticleItem是组件, 包括Vant的都是组件, 组件身上的事件都是自定义事件(别看是叫click)
+             组件内需要$emit('click')才会执行
+             解决: 给组件绑定原生的点击事件@click.native  (使用修饰符) -->
+        <ArticleItem
+        v-for="obj in articleList"
+        :key="obj.art_id" :artObj="obj"
+        :isShow="false"
+        @click.native="itemClickFn(obj.art_id)"></ArticleItem>
       </van-list>
     </div>
   </div>
@@ -53,6 +60,12 @@ export default {
       console.log(res)
       this.articleList = [...this.articleList, ...res.data.data.results]
       this.loading = false
+    },
+    // 跳转到详情
+    itemClickFn (id) {
+      this.$router.push({
+        path: `/detail?art_id=${id}`
+      })
     }
   }
 }

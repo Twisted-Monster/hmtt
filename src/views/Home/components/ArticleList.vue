@@ -14,7 +14,8 @@
       :key="obj.art_id"
       :artObj="obj"
       @dislike="dislikeFn"
-      @report="reportsFn"></article-item>
+      @report="reportsFn"
+      @click.native="itemClickFn(obj.art_id)"></article-item>
     </van-list>
     </van-pull-refresh>
   </div>
@@ -114,6 +115,12 @@ export default {
         console.log(err)
         Notify({ type: 'warning', message: '举报失败' })
       }
+    },
+    // 文章单元格-点击事件
+    itemClickFn (id) {
+      this.$router.push({
+        path: `/detail?art_id=${id}`
+      })
     }
   }
 }
