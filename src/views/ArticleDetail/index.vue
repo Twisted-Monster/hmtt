@@ -37,12 +37,17 @@
         <van-button icon="good-job-o" type="danger" plain size="small" v-else @click="loveFn(false)">点赞</van-button>
       </div>
     </div>
+    <!-- 文章评论部分 -->
+    <div>
+      <CommentList></CommentList>
+    </div>
   </div>
 </template>
 
 <script>
 import { detailAPI, userFollowedAPI, userUnFollowedAPI, likeArticleAPI, unLikeArticleAPI } from '@/api'
 import { timeAgo } from '@/utils/date'
+import CommentList from './CommentList'
 export default {
   data () {
     return {
@@ -55,6 +60,9 @@ export default {
     })
     console.log(res)
     this.artObj = res.data.data
+  },
+  components: {
+    CommentList
   },
   methods: {
     formatDate: timeAgo, // 系统时间到指定时间的距离

@@ -106,6 +106,32 @@ export const unLikeArticleAPI = ({ artId }) => request({
   url: `/v1_0/article/likings/${artId}`,
   method: 'DELETE'
 })
+// 文章--获取评论列表
+export const commentsListAPI = ({ id, offset = null, limit = 10 }) => request({
+  url: '/v1_0/comments',
+  params: { // axios只针对params参数，如果发现键值对值为null会忽略此参数名和值不携带在url?后面
+    type: 'a', // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
+    source: id, // 源id，文章id或评论id
+    offset, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
+    limit // 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
+  }
+})
+// 文章--发布评论
+export const commentSendAPI = ({ id, content, art_id = null }) => {
+  // 形参art_id为可选参数，如果逻辑页面是对文章评论，则不需要传递art_id
+  const obj = {
+    target: id, // 评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
+    content // 评论内容
+  }
+  if (art_id !== null) {
+    obj.art_id = art_id // 文章id，对评论内容发表回复时，需要传递此参数，表明所属文章id。对文章进行评论，不要传此参数
+  }
+  return request({
+    url: '/v1_0/comments',
+    method: 'POST',
+    data: obj
+  })
+}
 // 搜索--联想菜单列表
 export const suggestListAPI = ({ keywords }) => request({
   url: '/v1_0/suggestion',
@@ -120,3 +146,20 @@ export const searchResultAPI = ({ page = 1, per_page = 10, q }) => request({
     page, per_page, q // page:页数，不传默认为1 per_page:每页数量，不传每页数量由后端决定 q:搜索关键词
   }
 })
+// 评论--喜欢
+export const commentLikingAPI = ({ comId }) => {
+  return request({
+    url: '/v1_0/comment/likings',
+    method: 'POST',
+    data: {
+      target: comId
+    }
+  })
+}
+// 评论--取消喜欢
+export const commentDisLikingAPI = ({ comId }) => {
+  return request({
+    url: `/v1_0/comment/likings/${comId}`,
+    method: 'DELETE'
+  })
+}

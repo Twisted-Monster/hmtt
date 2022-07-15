@@ -55,8 +55,12 @@ export default {
   methods: {
     // 底部加载事件
     async onLoad () {
+      // imediate-check：内部不要进行判断而已，监听滚动事件的代码还在
+      // 第一个滚动到底部，再切换到第二个频道的时候（新建内容没有那么高），滚动会从底部滚动会顶部
+      // 这个时候发生了滚动，所以滚动事件还是出发了，immediate-check判断无效
       if (this.list.length === 0) {
         this.loading = false
+        return
       }
       this.getArticleListFn()
     },

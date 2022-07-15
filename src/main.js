@@ -34,11 +34,18 @@ const directiveObj = {
     Vue.directive('fofo', {
       // 当绑定元素插入到 DOM 中
       inserted: function (el) {
-        // 指令所在van-search组件
-        // 组件根标签是div，input在内部
-        const theInput = el.querySelector('input')
-        // 聚焦标签
-        theInput.focus()
+        // 搜索页面--el是div
+        // 文章评论--el是textarea
+        // 知识点：原生DOM.nodeName拿到标签名字(注意：大写的字符串)
+        if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT') {
+          el.focus()
+        } else {
+          // el本身本身不是输入框，尝试往里面获取一下
+          const theInput = el.querySelector('input')
+          const theTextArea = el.querySelector('textarea')
+          if (theInput) theInput.focus()
+          if (theTextArea) theTextArea.focus()
+        }
       }
     })
   }
