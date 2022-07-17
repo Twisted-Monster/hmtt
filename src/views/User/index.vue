@@ -35,7 +35,7 @@
     <!-- 操作面板 -->
     <van-cell-group class="action-card">
       <van-cell icon="edit" title="编辑资料" is-link to="/user_edit"/>
-      <van-cell icon="chat-o" title="小思同学" is-link />
+      <van-cell icon="chat-o" title="人工智障" is-link to="/chat" />
       <van-cell icon="warning-o" title="退出登录" is-link @click="quitFn"/>
     </van-cell-group>
   </div>
@@ -45,11 +45,14 @@
 import { getUserInfoAPI } from '@/api'
 import { Dialog } from 'vant'
 import { removeToken } from '@/utils/token.js'
+import { mapMutations } from 'vuex' // 使用vuex的辅助函数
 export default {
   async created () {
     const res = await getUserInfoAPI()
     console.log(res)
     this.userObj = res.data.data
+    // 直接的方式 this.$store.commit('SET_USERPHOTO',this.userObj.photo)
+    this.SET_USERPHOTO(this.userObj.photo)
   },
   data () {
     return {
@@ -57,6 +60,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['SET_USERPHOTO']),
     // 退出登陆
     // 主动退出->用户点击退出，清空token，强制repalce切换登录页
     // 被动退出->把token值传后台，后台返回401->响应拦截器发现401状态证明身份过去->强制进登录页
