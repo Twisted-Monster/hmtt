@@ -7,6 +7,7 @@ import User from '@/views/User'
 import Search from '@/views/Search'
 import SearchResult from '@/views/Search/SearchResult'
 import ArticleDetail from '@/views/ArticleDetail'
+import UserEdit from '@/views/User/UserEdit'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,10 @@ const routes = [
   {
     path: '/detail',
     component: ArticleDetail
+  },
+  { // 用户编辑页面
+    path: '/user_edit',
+    component: UserEdit
   }
 ]
 

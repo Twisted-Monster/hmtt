@@ -28,6 +28,44 @@ export const userUnFollowedAPI = ({ userId }) => request({
   url: `/v1_0/user/followings/${userId}`,
   method: 'DeLETE'
 })
+// 用户--获取个人资料(编辑页面使用)
+export const userProfileAPI = () => request({
+  url: '/v1_0/user/profile'
+})
+// 用户--获取基本信息(home页面显示数据)
+export const getUserInfoAPI = () => request({
+  url: '/v1_0/user'
+})
+// 用户--更新头像
+export const updateUserPhotoAPI = (fd) => request({
+  url: '/v1_0/user/photo',
+  method: 'PATCH',
+  data: fd // 外面传进来的FormData表单对象
+  // Content-Type: application.json; axios携带的，前提：data请求体是对象->json字符串->发给后台
+  // Content-Type：multipart/form-data;浏览器携带的，前提:data请求体必须是FormData类型对象
+})
+// 用户--更新基本资料
+export const updateUserProfileAPI = (dataobj) => {
+  // 判断有什么值，再带什么参数给后台
+  const obj = {
+    name: '',
+    gender: 0,
+    birthday: '',
+    intro: ''
+  }
+  for (const prop in obj) { // 遍历参数对象里的每个key
+    if (dataobj[prop] === undefined) { // 用key去外面传入的参数对象匹配，如果没找到(证明外面没传这个值)
+      delete obj[prop] // 从obj身上移除这对属性和值
+    } else {
+      obj[prop] = dataobj[prop]
+    }
+  }
+  return request({
+    url: '/v1_0/user/profile',
+    method: 'PATCH', // 局部更新
+    data: obj // name:昵称，gender:性别，birthday:生日(年-月-日 字符串)，intro:个人介绍
+  })
+}
 // 频道--获取所有频道
 export const getAllChannelsAPI = () =>
   request({
