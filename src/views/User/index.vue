@@ -53,6 +53,15 @@ export default {
     this.userObj = res.data.data
     // 直接的方式 this.$store.commit('SET_USERPHOTO',this.userObj.photo)
     this.SET_USERPHOTO(this.userObj.photo)
+    console.log('创建')
+  },
+  async activated () {
+    const res = await getUserInfoAPI()
+    console.log(res)
+    this.userObj = res.data.data
+    // 直接的方式 this.$store.commit('SET_USERPHOTO',this.userObj.photo)
+    this.SET_USERPHOTO(this.userObj.photo)
+    console.log('激活')
   },
   data () {
     return {
