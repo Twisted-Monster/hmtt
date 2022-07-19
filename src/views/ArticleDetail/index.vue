@@ -3,43 +3,50 @@
     <!-- Header 区域 -->
     <van-nav-bar fixed title="文章详情" left-arrow @click-left="$router.back()" />
 
-    <!-- 文章信息区域 -->
-    <div class="article-container">
-      <!-- 文章标题 -->
-      <h1 class="art-title">{{artObj.title}}</h1>
+    <!-- 文章等待加载中 -->
+    <van-loading color="#1989fa" v-if="Object.keys(artObj).length === 0">
+      文章加载ing...
+    </van-loading>
 
-      <!-- 用户信息 -->
-      <van-cell center :title="artObj.aut_name" :label="formatDate(artObj.pubdate)">
-        <template #icon>
-          <img :src="artObj.aut_photo" alt="" class="avatar">
-        </template>
-        <template #default>
-          <div>
-            <van-button type="info" size="mini" v-if="artObj.is_followed" @click="followedFn(true)">已关注</van-button>
-            <van-button icon="plus" type="info" size="mini" plain v-else @click="followedFn(false)">关注</van-button>
-          </div>
-        </template>
-      </van-cell>
+    <div v-else>
+      <!-- 文章信息区域 -->
+      <div class="article-container">
+        <!-- 文章标题 -->
+        <h1 class="art-title">{{artObj.title}}</h1>
 
-      <!-- 分割线 -->
-      <van-divider></van-divider>
+        <!-- 用户信息 -->
+        <van-cell center :title="artObj.aut_name" :label="formatDate(artObj.pubdate)">
+          <template #icon>
+            <img :src="artObj.aut_photo" alt="" class="avatar">
+          </template>
+          <template #default>
+            <div>
+              <van-button type="info" size="mini" v-if="artObj.is_followed" @click="followedFn(true)">已关注</van-button>
+              <van-button icon="plus" type="info" size="mini" plain v-else @click="followedFn(false)">关注</van-button>
+            </div>
+          </template>
+        </van-cell>
 
-      <!-- 文章内容 -->
-      <div class="art-content" v-html="artObj.content"></div>
+        <!-- 分割线 -->
+        <van-divider></van-divider>
 
-      <!-- 分割线 -->
-      <van-divider>End</van-divider>
+        <!-- 文章内容 -->
+        <div class="art-content" v-html="artObj.content"></div>
 
-      <!-- 点赞 -->
-      <!-- attitude: -1:无态度 0：不喜欢 1：点赞 -->
-      <div class="like-box">
-        <van-button icon="good-job" type="danger" size="small" v-if="artObj.attitude === 1" @click="loveFn(true)">已点赞</van-button>
-        <van-button icon="good-job-o" type="danger" plain size="small" v-else @click="loveFn(false)">点赞</van-button>
+        <!-- 分割线 -->
+        <van-divider>End</van-divider>
+
+        <!-- 点赞 -->
+        <!-- attitude: -1:无态度 0：不喜欢 1：点赞 -->
+        <div class="like-box">
+          <van-button icon="good-job" type="danger" size="small" v-if="artObj.attitude === 1" @click="loveFn(true)">已点赞</van-button>
+          <van-button icon="good-job-o" type="danger" plain size="small" v-else @click="loveFn(false)">点赞</van-button>
+        </div>
       </div>
-    </div>
-    <!-- 文章评论部分 -->
-    <div>
-      <CommentList></CommentList>
+      <!-- 文章评论部分 -->
+      <div>
+        <CommentList></CommentList>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +56,7 @@ import { detailAPI, userFollowedAPI, userUnFollowedAPI, likeArticleAPI, unLikeAr
 import { timeAgo } from '@/utils/date'
 import CommentList from './CommentList'
 export default {
+  name: 'Detail',
   data () {
     return {
       artObj: {} // 文章对象
@@ -159,5 +167,10 @@ export default {
 .like-box {
   display: flex;
   justify-content: center;
+}
+// 加载中居中样式
+.van-loading{
+  text-align: center;
+  padding-top: 46px;
 }
 </style>

@@ -27,8 +27,9 @@
 
 <script>
 import { loginAPI } from '@/api'
-import { Notify } from 'vant'
+import Notify from '@/ui/Notify'
 import { setToken } from '@/utils/token'
+import { setStorage } from '@/utils/storage'
 export default {
   data () {
     return {
@@ -47,9 +48,12 @@ export default {
         console.log(res)
         Notify({ type: 'success', message: '登陆成功' })
         setToken(res.data.data.token)
+        setStorage('refresh_token', res.data.data.refresh_token)
         // location.href->当前地址和要跳转的地址(不包含#后面的内容)一样不会刷新网页。地址改变则会刷新
         // 跳转一定要写到最后，尽量最后执行
-        this.$router.push({ path: '/layout/home' })
+        this.$router.push({
+          path: this.$route.query.path || '/layout/home'
+        })
       } catch (error) {
         Notify({ type: 'danger', message: '账号或密码错误' })
       }

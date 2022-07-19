@@ -1,8 +1,12 @@
 // 统一封装接口方法
 // 每个方法负责请求一个url地址
 import request from '@/utils/request.js'
+import { getStorgae } from '@/utils/storage'
 // axios内部会把参数对象转成json格式发送后台
 // axios内部会自动携带请求参数(Headers)里的Content-Type：application/json
+
+// 既引入也同时向外按需导出，所有引入过来的方法(中转)
+// export * from './ArticleDetail.js'
 
 // 登陆--登陆接口
 export const loginAPI = ({ mobile, code }) => {
@@ -15,6 +19,16 @@ export const loginAPI = ({ mobile, code }) => {
     }
   })
 }
+// 用户--刷新token
+export const getNewTokenAPI = () => request({
+  url: '/v1_0/authorizations',
+  method: 'PUT',
+  headers: {
+    // 请求拦截器统一携带的是token，而这次请求需要携带的是refresh_token
+    // 所以在axios请求拦截器里判断，就是为了这种情况准备的
+    Authorization: 'Bearer ' + getStorgae('refresh_token')
+  }
+})
 // 用户--关注
 export const userFollowedAPI = ({ userId }) => request({
   url: '/v1_0/user/followings',

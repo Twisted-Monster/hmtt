@@ -24,7 +24,7 @@
 <script>
 import ArticleItem from '@/components/ArticleItem'
 import { getAllArticleListAPI, dislikeArticleAPI, reportArticleAPI } from '@/api'
-import { Notify } from 'vant'
+import Notify from '@/ui/Notify'
 
 // 问题1：网页刚打开，created里请求和onload里请求同时发送，请求的都是最新数据
 // onload中把两次一样的数据合并，造成数据重复导致key重复

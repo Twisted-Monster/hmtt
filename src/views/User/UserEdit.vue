@@ -7,7 +7,7 @@
     <van-cell-group class="action-card">
       <van-cell title="头像" is-link center>
         <template #default>
-          <van-image round class="avatar" :src="profileObj.photo" @click="imageClickFn" />
+          <van-image round class="avatar" :src="$store.state.userPhoto" @click="imageClickFn" />
           <!-- file 选择框 -->
           <!-- v-show="false"视觉上隐藏，标签还在DOM树上，还可以触发功能 -->
           <!-- ref属性是vue操作DOM的一种方法 -->
@@ -37,8 +37,9 @@
 
 <script>
 import { userProfileAPI, updateUserPhotoAPI, updateUserProfileAPI } from '@/api'
-import { Notify } from 'vant'
+import Notify from '@/ui/Notify'
 import { formatDate } from '@/utils/date'
+import { mapMutations } from 'vuex'
 export default {
   name: 'UserEdit',
   data () {
@@ -58,6 +59,7 @@ export default {
     this.profileObj = res.data.data
   },
   methods: {
+    ...mapMutations(['SET_USERPHOTO']),
     // 文件--选择改变事件
     async onFileChange (e) {
       if (e.target.files.length === 0) return
@@ -69,6 +71,7 @@ export default {
       const res = await updateUserPhotoAPI(theFd)
       console.log(res)
       this.profileObj.photo = res.data.data.photo
+      this.SET_USERPHOTO(this.profileObj.photo) // 更新成功后，同步到vuex中
     },
     // 图片点击事件
     imageClickFn () {

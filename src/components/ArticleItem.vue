@@ -8,15 +8,17 @@
           <!-- 标题 -->
           <span>{{artObj.title}}</span>
           <!-- 单图 -->
-          <van-image v-if="artObj.cover.type === 1" :src="artObj.cover.images[0]" alt="" class="thumb">
+          <img v-if="artObj.cover.type === 1" v-lazy="artObj.cover.images[0]" alt="" class="thumb">
+          <!-- <van-image v-if="artObj.cover.type === 1" :src="artObj.cover.images[0]" alt="" class="thumb">
             <template v-slot:error>加载失败</template>
-          </van-image>
+          </van-image> -->
         </div>
         <!-- 多图 -->
         <div class="thumb-box" v-if="artObj.cover.type > 1">
-          <van-image :src="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
+          <img v-lazy="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
+          <!-- <van-image :src="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
             <template v-slot:error>加载失败</template>
-          </van-image>
+          </van-image> -->
         </div>
       </template>
       <!-- label 区域的插槽 -->

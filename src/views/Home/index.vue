@@ -18,7 +18,7 @@
          v-tab每一项
          v-model激活项-->
       <!-- 被定位的头部导航挡住, 给tabs设置固定定位/粘性定位, 距离上边46px(手动转rem) -->
-      <van-tabs v-model="channelId" sticky offset-top="1.226667rem" animated>
+      <van-tabs v-model="channelId" sticky offset-top="1.226667rem" animated @change="channelChangeFn">
         <!-- 每个van-tab代表一个标签导航，中间夹着的内容对应下属列表内容 -->
         <!-- 在标签指定 name 属性的情况下，v-model 的值为当前标签的 name（此时无法通过索引值来匹配标签） -->
         <van-tab :title="obj.name" v-for="obj in userChannelList" :key ="obj.id" :name="obj.id">
@@ -61,7 +61,8 @@ export default {
       channelId: 0, // 激活频道id
       userChannelList: [], // 用户选择的频道
       allChannelList: [], // 所有的频道
-      show: false // 控制弹出层是否展示
+      show: false, // 控制弹出层是否展示
+      channelScrollTObj: {} // 保存每个频道的滚动位置 { 推荐频道ID:滚动距离 }
     }
   },
   async created () {
@@ -79,6 +80,15 @@ export default {
     ChannelEdit
   },
   methods: {
+    // tab栏切换事件
+    channelChangeFn () {
+      // tab切换后，设置滚动条位置
+      // tab切换时，这个组件内部，会把切走的容器的height设置为0，滚动条应为没有高度回到了顶部
+      // 切回来的一瞬间，没有高度，滚动条回到顶部同时对象里的值也被设置为0
+      // tab栏切换事件比滚动事件先执行，但是切换瞬间容器高度为0，给它赋值也没效果
+      // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
+      this.$nextTick(() => { document.documentElement.scrollTop = this.channelScrollTObj[this.channelId] })
+    },
     // +号点击方法
     showPopup () {
       this.show = true
@@ -123,6 +133,13 @@ export default {
     // 首页-右上角放大镜点击事件->跳转到搜索界面
     moveSearchPageFn () {
       this.$router.push('/search')
+    },
+    // 页面滚动事件
+    scrollFn () {
+      // 当前路由的滚动距离
+      this.$route.meta.scrollT = document.documentElement.scrollTop
+      // 同时保存当前频道的滚动距离
+      this.channelScrollTObj[this.channelId] = document.documentElement.scrollTop
     }
   },
   computed: {
@@ -146,6 +163,13 @@ export default {
       })
       return newArr
     }
+  },
+  activated () {
+    window.addEventListener('scroll', this.scrollFn)
+    document.documentElement.scrollTop = this.$route.meta.scrollT
+  },
+  deactivated () {
+    window.removeEventListener('scroll', this.scrollFn)
   }
 }
 </script>
