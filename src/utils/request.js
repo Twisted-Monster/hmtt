@@ -60,7 +60,7 @@ axios.interceptors.response.use(function (response) {
     return axios(error.config)
   } else if (error.response.status === 500 && error.config.url === '/v1_0/authorizations' && error.config.method === 'put') {
     // 刷新的refresh_token也过期了
-    localStorage.clear()
+    // localStorage.clear()
     router.replace(`/login?path=${router.currentRoute.fullPath}`)
     Notify({ type: 'warning', message: '身份已过期' })
   }

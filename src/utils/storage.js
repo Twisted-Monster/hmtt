@@ -5,9 +5,7 @@ export const setStorage = (key, value) => {
   localStorage.setItem(key, value)
 }
 
-export const getStorgae = (key, value) => {
-  return localStorage.getItem(key)
-}
+export const getStoragae = (key) => localStorage.getItem(key)
 
 export const removeStorage = (key) => {
   localStorage.removeItem(key)

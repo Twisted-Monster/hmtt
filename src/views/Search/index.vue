@@ -48,7 +48,7 @@
 // 2. 点击联想菜单->点击文字->搜索结果页
 // 3.点击历史记录->点击文字->搜索结果页
 import { suggestListAPI } from '@/api'
-import { getStorage, setStorage } from '@/utils/storage'
+import { setStorage, getStoragae } from '@/utils/storage'
 
 export default {
   name: 'Search',
@@ -57,7 +57,7 @@ export default {
       kw: '', // 搜索关键字
       timer: null, // 防抖的定时器
       suggestList: [], // 联想建议列表
-      history: JSON.parse(getStorage('his')) || [] // 搜索历史
+      history: JSON.parse(getStoragae('his')) || [] // 搜索历史
     }
   },
   methods: {
