@@ -1,7 +1,12 @@
 <template>
   <div>
     <!-- Header 区域 -->
-    <van-nav-bar fixed title="文章详情" left-arrow @click-left="$router.back()" />
+    <van-nav-bar
+      fixed
+      title="文章详情"
+      left-arrow
+      @click-left="$router.back()"
+    />
 
     <!-- 文章等待加载中 -->
     <van-loading color="#1989fa" v-if="Object.keys(artObj).length === 0">
@@ -12,17 +17,35 @@
       <!-- 文章信息区域 -->
       <div class="article-container">
         <!-- 文章标题 -->
-        <h1 class="art-title">{{artObj.title}}</h1>
+        <h1 class="art-title">{{ artObj.title }}</h1>
 
         <!-- 用户信息 -->
-        <van-cell center :title="artObj.aut_name" :label="formatDate(artObj.pubdate)">
+        <van-cell
+          center
+          :title="artObj.aut_name"
+          :label="formatDate(artObj.pubdate)"
+        >
           <template #icon>
-            <img :src="artObj.aut_photo" alt="" class="avatar">
+            <img :src="artObj.aut_photo" alt="" class="avatar" />
           </template>
           <template #default>
             <div>
-              <van-button type="info" size="mini" v-if="artObj.is_followed" @click="followedFn(true)">已关注</van-button>
-              <van-button icon="plus" type="info" size="mini" plain v-else @click="followedFn(false)">关注</van-button>
+              <van-button
+                type="info"
+                size="mini"
+                v-if="artObj.is_followed"
+                @click="followedFn(true)"
+                >已关注</van-button
+              >
+              <van-button
+                icon="plus"
+                type="info"
+                size="mini"
+                plain
+                v-else
+                @click="followedFn(false)"
+                >关注</van-button
+              >
             </div>
           </template>
         </van-cell>
@@ -39,8 +62,23 @@
         <!-- 点赞 -->
         <!-- attitude: -1:无态度 0：不喜欢 1：点赞 -->
         <div class="like-box">
-          <van-button icon="good-job" type="danger" size="small" v-if="artObj.attitude === 1" @click="loveFn(true)">已点赞</van-button>
-          <van-button icon="good-job-o" type="danger" plain size="small" v-else @click="loveFn(false)">点赞</van-button>
+          <van-button
+            icon="good-job"
+            type="danger"
+            size="small"
+            v-if="artObj.attitude === 1"
+            @click="loveFn(true)"
+            >已点赞</van-button
+          >
+          <van-button
+            icon="good-job-o"
+            type="danger"
+            plain
+            size="small"
+            v-else
+            @click="loveFn(false)"
+            >点赞</van-button
+          >
         </div>
       </div>
       <!-- 文章评论部分 -->
@@ -52,17 +90,24 @@
 </template>
 
 <script>
-import { detailAPI, userFollowedAPI, userUnFollowedAPI, likeArticleAPI, unLikeArticleAPI } from '@/api'
+import {
+  detailAPI,
+  userFollowedAPI,
+  userUnFollowedAPI,
+  likeArticleAPI,
+  unLikeArticleAPI
+} from '@/api'
 import { timeAgo } from '@/utils/date'
 import CommentList from './CommentList'
 export default {
   name: 'Detail',
-  data () {
+  data() {
     return {
       artObj: {} // 文章对象
     }
   },
-  async created () { // 获取文章对象
+  async created() {
+    // 获取文章对象
     const res = await detailAPI({
       artId: this.$route.query.art_id
     })
@@ -75,7 +120,7 @@ export default {
   methods: {
     formatDate: timeAgo, // 系统时间到指定时间的距离
     // 关注/取关 -> 作者
-    async followedFn (bool) {
+    async followedFn(bool) {
       if (bool === true) {
         // 用户点在已关注按钮上
         // 页面->显示关注按钮
@@ -99,7 +144,7 @@ export default {
       }
     },
     // 点赞/取消点赞->文章
-    async loveFn (bool) {
+    async loveFn(bool) {
       if (bool === true) {
         // 用户点在了“已点赞”按钮上
         // 显示“点赞”按钮
@@ -139,13 +184,13 @@ export default {
   width: 100%;
   overflow-x: scroll;
   word-break: break-all;
-    /deep/ img{
-      width: 100%;
-    }
-    /deep/ pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
+  /deep/ img {
+    width: 100%;
+  }
+  /deep/ pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
 }
 
 .van-cell {
@@ -169,7 +214,7 @@ export default {
   justify-content: center;
 }
 // 加载中居中样式
-.van-loading{
+.van-loading {
   text-align: center;
   padding-top: 46px;
 }

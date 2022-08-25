@@ -7,39 +7,61 @@
           <img class="logo" src="@/assets/toutiao_logo.png" />
         </template>
         <template #right>
-          <van-icon name="search" size="0.48rem" color="#fff" @click="moveSearchPageFn" />
+          <van-icon
+            name="search"
+            size="0.48rem"
+            color="#fff"
+            @click="moveSearchPageFn"
+          />
         </template>
       </van-nav-bar>
     </div>
 
-   <div>
-     <!-- tab栏导航
+    <div>
+      <!-- tab栏导航
          v-tabs一行容器
          v-tab每一项
          v-model激活项-->
       <!-- 被定位的头部导航挡住, 给tabs设置固定定位/粘性定位, 距离上边46px(手动转rem) -->
-      <van-tabs v-model="channelId" sticky offset-top="1.226667rem" animated @change="channelChangeFn">
+      <van-tabs
+        v-model="channelId"
+        sticky
+        offset-top="1.226667rem"
+        animated
+        @change="channelChangeFn"
+      >
         <!-- 每个van-tab代表一个标签导航，中间夹着的内容对应下属列表内容 -->
         <!-- 在标签指定 name 属性的情况下，v-model 的值为当前标签的 name（此时无法通过索引值来匹配标签） -->
-        <van-tab :title="obj.name" v-for="obj in userChannelList" :key ="obj.id" :name="obj.id">
+        <van-tab
+          :title="obj.name"
+          v-for="obj in userChannelList"
+          :key="obj.id"
+          :name="obj.id"
+        >
           <ArticleList :channelId="channelId"></ArticleList>
         </van-tab>
       </van-tabs>
       <!-- 编辑频道图标 -->
-      <van-icon name="plus" size="0.37333334rem" class="moreChannels" @click="showPopup"/>
-   </div>
-   <!-- 频道管理的弹出层 -->
-   <van-popup v-model="show" get-container="body" class="channel_popup">
-    <ChannelEdit
-    :userList="userChannelList"
-    :unCheckList="unCheckChannelList"
-    @addChannelEV="addChannelFn"
-    @removeChannelEV="removeChannelFn"
-    @closeEV="closeFn"
-    ref="editRef"
-    v-model="channelId"></ChannelEdit>
-   </van-popup>
+      <van-icon
+        name="plus"
+        size="0.37333334rem"
+        class="moreChannels"
+        @click="showPopup"
+      />
     </div>
+    <!-- 频道管理的弹出层 -->
+    <van-popup v-model="show" get-container="body" class="channel_popup">
+      <ChannelEdit
+        :userList="userChannelList"
+        :unCheckList="unCheckChannelList"
+        @addChannelEV="addChannelFn"
+        @removeChannelEV="removeChannelFn"
+        @closeEV="closeFn"
+        ref="editRef"
+        v-model="channelId"
+      ></ChannelEdit>
+    </van-popup>
+  </div>
 </template>
 
 <script>
@@ -52,11 +74,16 @@
 // 细节：van-tab循环了很多标签导航，与之一一对应的内容列表不是上来都创建的，默认创建当前激活导航对应列表组件
 // 第一次切换到对应频道时，才会创建下属的ArticleList组件，第二次切换就是显示/隐藏切换
 
-import { getUSerChannelsAPI, getAllChannelsAPI, updateChannelsAPI, removeTheChannelAPI } from '@/api'
+import {
+  getUSerChannelsAPI,
+  getAllChannelsAPI,
+  updateChannelsAPI,
+  removeTheChannelAPI
+} from '@/api'
 import ArticleList from './components/ArticleList'
 import ChannelEdit from './ChannelEdit'
 export default {
-  data () {
+  data() {
     return {
       channelId: 0, // 激活频道id
       userChannelList: [], // 用户选择的频道
@@ -65,7 +92,7 @@ export default {
       channelScrollTObj: {} // 保存每个频道的滚动位置 { 推荐频道ID:滚动距离 }
     }
   },
-  async created () {
+  async created() {
     // 用户选择的频道
     const res1 = await getUSerChannelsAPI()
     console.log(res1)
@@ -81,20 +108,23 @@ export default {
   },
   methods: {
     // tab栏切换事件
-    channelChangeFn () {
+    channelChangeFn() {
       // tab切换后，设置滚动条位置
       // tab切换时，这个组件内部，会把切走的容器的height设置为0，滚动条应为没有高度回到了顶部
       // 切回来的一瞬间，没有高度，滚动条回到顶部同时对象里的值也被设置为0
       // tab栏切换事件比滚动事件先执行，但是切换瞬间容器高度为0，给它赋值也没效果
       // $nextTick 是在下次 DOM 更新循环结束之后执行延迟回调
-      this.$nextTick(() => { document.documentElement.scrollTop = this.channelScrollTObj[this.channelId] })
+      this.$nextTick(() => {
+        document.documentElement.scrollTop =
+          this.channelScrollTObj[this.channelId]
+      })
     },
     // +号点击方法
-    showPopup () {
+    showPopup() {
       this.show = true
     },
     // 添加频道
-    async addChannelFn (channelObj) {
+    async addChannelFn(channelObj) {
       this.userChannelList.push(channelObj)
       // 把最新的数组发送给后台
       /* forEach() 方法对数组的每个元素执行一次给定的函数
@@ -106,8 +136,10 @@ export default {
       console.log(res)
     },
     // 删除频道
-    async removeChannelFn (channelObj) {
-      const index = this.userChannelList.findIndex(obj => obj.id === channelObj.id)
+    async removeChannelFn(channelObj) {
+      const index = this.userChannelList.findIndex(
+        obj => obj.id === channelObj.id
+      )
       this.userChannelList.splice(index, 1)
       // 第一种方式：把现在用户数组的数据，再覆盖式的发给后台
       // 需要把上面的更新数组过程，封装一个函数，add和remove里调用
@@ -122,7 +154,7 @@ export default {
       }
     },
     // 关闭弹出层
-    closeFn () {
+    closeFn() {
       this.show = false
       // 让内部的编辑状态回归false
       /* ref 被用来给元素或子组件注册引用信息， 引用信息将会注册在父组件的 $refs 对象上，
@@ -131,20 +163,21 @@ export default {
       this.$refs.editRef.isEdit = false
     },
     // 首页-右上角放大镜点击事件->跳转到搜索界面
-    moveSearchPageFn () {
+    moveSearchPageFn() {
       this.$router.push('/search')
     },
     // 页面滚动事件
-    scrollFn () {
+    scrollFn() {
       // 当前路由的滚动距离
       this.$route.meta.scrollT = document.documentElement.scrollTop
       // 同时保存当前频道的滚动距离
-      this.channelScrollTObj[this.channelId] = document.documentElement.scrollTop
+      this.channelScrollTObj[this.channelId] =
+        document.documentElement.scrollTop
     }
   },
   computed: {
     // 用户未选择的频道
-    unCheckChannelList () {
+    unCheckChannelList() {
       /* filter用于把Array的某些元素过滤掉，然后返回剩下的元素。
       filter()把传入的函数依次作用于每个元素，然后根据返回值是true还是false决定保留还是丢弃该元素。 */
       /* findIndex()方法返回数组中满足提供的测试函数的第一个元素的索引。若没有找到对应元素则返回-1 */
@@ -164,11 +197,11 @@ export default {
       return newArr
     }
   },
-  activated () {
+  activated() {
     window.addEventListener('scroll', this.scrollFn)
     document.documentElement.scrollTop = this.$route.meta.scrollT
   },
-  deactivated () {
+  deactivated() {
     window.removeEventListener('scroll', this.scrollFn)
   }
 }
@@ -180,8 +213,9 @@ export default {
   height: 30px;
 }
 /* tab内容距离tab导航的距离 */
-/deep/ .van-tabs__content{
-    padding-top: 44px;
+/* van-tabs__content是vant的组件库里的子组件，没有父组件的自定义属性*/
+/deep/ .van-tabs__content {
+  padding-top: 44px;
 }
 // 设置 tabs 容器的样式
 /deep/ .van-tabs__wrap {

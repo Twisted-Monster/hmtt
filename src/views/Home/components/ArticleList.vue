@@ -1,29 +1,35 @@
 <template>
   <div>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <!-- 文章列表 immediate-check:是否在初始化时立即执行滚动位置检查-->
-    <van-list
-    v-model="loading"
-    :finished="finished"
-    finished-text="没有更多了"
-    @load="onLoad"
-    :immediate-check="false"
-    offset="50">
-      <article-item
-      v-for="obj in list"
-      :key="obj.art_id"
-      :artObj="obj"
-      @dislike="dislikeFn"
-      @report="reportsFn"
-      @click.native="itemClickFn(obj.art_id)"></article-item>
-    </van-list>
+      <!-- 文章列表 immediate-check:是否在初始化时立即执行滚动位置检查-->
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :immediate-check="false"
+        offset="50"
+      >
+        <article-item
+          v-for="obj in list"
+          :key="obj.art_id"
+          :artObj="obj"
+          @dislike="dislikeFn"
+          @report="reportsFn"
+          @click.native="itemClickFn(obj.art_id)"
+        ></article-item>
+      </van-list>
     </van-pull-refresh>
   </div>
 </template>
 
 <script>
 import ArticleItem from '@/components/ArticleItem'
-import { getAllArticleListAPI, dislikeArticleAPI, reportArticleAPI } from '@/api'
+import {
+  getAllArticleListAPI,
+  dislikeArticleAPI,
+  reportArticleAPI
+} from '@/api'
 import Notify from '@/ui/Notify'
 
 // 问题1：网页刚打开，created里请求和onload里请求同时发送，请求的都是最新数据
@@ -40,7 +46,7 @@ export default {
     /*  list: Array // 文章列表数组 */
     channelId: Number
   },
-  data () {
+  data() {
     return {
       list: [],
       loading: false, // 底部加载状态
@@ -49,12 +55,12 @@ export default {
       isLoading: false
     }
   },
-  async created () {
+  async created() {
     this.getArticleListFn()
   },
   methods: {
     // 底部加载事件
-    async onLoad () {
+    async onLoad() {
       // imediate-check：内部不要进行判断而已，监听滚动事件的代码还在
       // 第一个滚动到底部，再切换到第二个频道的时候（新建内容没有那么高），滚动会从底部滚动会顶部
       // 这个时候发生了滚动，所以滚动事件还是出发了，immediate-check判断无效
@@ -65,13 +71,13 @@ export default {
       this.getArticleListFn()
     },
     // 顶部刷新数据事件
-    async onRefresh () {
+    async onRefresh() {
       this.list = []
       this.theTime = new Date().getTime()
       this.getArticleListFn()
     },
     // 专门负责发送请求
-    async getArticleListFn () {
+    async getArticleListFn() {
       const res = await getAllArticleListAPI({
         channel_id: this.channelId,
         timestamp: this.theTime
@@ -84,14 +90,15 @@ export default {
       this.list = [...this.list, ...res.data.data.results]
       this.theTime = res.data.data.pre_timestamp
       this.loading = false // 如果不关闭底部一直是加载中的状态
-      if (res.data.data.pre_timestamp === null) { // 本次回来的数据是最后的
+      if (res.data.data.pre_timestamp === null) {
+        // 本次回来的数据是最后的
         this.finished = true
       }
       // 顶部加载状态改为false
       this.isLoading = false
     },
     // 反馈-不感兴趣
-    async dislikeFn (obj) {
+    async dislikeFn(obj) {
       // 如果用try+catch自己处理错误，内部throw就不会向控制台抛出打印错误，而是交给你的catch内自定义错误
       // try+catch捕获同步代码的异常
       try {
@@ -106,7 +113,7 @@ export default {
       }
     },
     // 反馈-举报
-    async reportsFn (obj, type) {
+    async reportsFn(obj, type) {
       try {
         const res = await reportArticleAPI({
           target: obj.art_id,
@@ -121,7 +128,7 @@ export default {
       }
     },
     // 文章单元格-点击事件
-    itemClickFn (id) {
+    itemClickFn(id) {
       this.$router.push({
         path: `/detail?art_id=${id}`
       })

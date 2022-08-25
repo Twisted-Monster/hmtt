@@ -1,8 +1,5 @@
 // 统一封装，便于修改
-export const firstActions = [
-  { name: '不感兴趣' },
-  { name: '反馈垃圾内容' }
-]
+export const firstActions = [{ name: '不感兴趣' }, { name: '反馈垃圾内容' }]
 
 export const secondActions = [
   {

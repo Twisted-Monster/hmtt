@@ -6,10 +6,10 @@
       <van-cell>
         <!-- 使用 title 插槽来自定义标题 -->
         <template #icon>
-          <img :src="$store.state.userPhoto" alt="" class="avatar">
+          <img :src="$store.state.userPhoto" alt="" class="avatar" />
         </template>
         <template #title>
-          <span class="username">{{userObj.name}}</span>
+          <span class="username">{{ userObj.name }}</span>
         </template>
         <template #label>
           <van-tag color="#fff" text-color="#007bff">申请认证</van-tag>
@@ -18,15 +18,15 @@
       <!-- 动态、关注、粉丝 -->
       <div class="user-data">
         <div class="user-data-item">
-          <span>{{userObj.art_count}}</span>
+          <span>{{ userObj.art_count }}</span>
           <span>动态</span>
         </div>
         <div class="user-data-item">
-          <span>{{userObj.follow_count}}</span>
+          <span>{{ userObj.follow_count }}</span>
           <span>关注</span>
         </div>
         <div class="user-data-item">
-          <span>{{userObj.fans_count}}</span>
+          <span>{{ userObj.fans_count }}</span>
           <span>粉丝</span>
         </div>
       </div>
@@ -34,9 +34,9 @@
 
     <!-- 操作面板 -->
     <van-cell-group class="action-card">
-      <van-cell icon="edit" title="编辑资料" is-link to="/user_edit"/>
+      <van-cell icon="edit" title="编辑资料" is-link to="/user_edit" />
       <van-cell icon="chat-o" title="人工智障" is-link to="/chat" />
-      <van-cell icon="warning-o" title="退出登录" is-link @click="quitFn"/>
+      <van-cell icon="warning-o" title="退出登录" is-link @click="quitFn" />
     </van-cell-group>
   </div>
 </template>
@@ -47,7 +47,7 @@ import { Dialog } from 'vant'
 import { removeToken } from '@/utils/token.js'
 import { mapMutations } from 'vuex' // 使用vuex的辅助函数
 export default {
-  async created () {
+  async created() {
     const res = await getUserInfoAPI()
     console.log(res)
     this.userObj = res.data.data
@@ -55,7 +55,7 @@ export default {
     this.SET_USERPHOTO(this.userObj.photo)
     console.log('创建')
   },
-  async activated () {
+  async activated() {
     const res = await getUserInfoAPI()
     console.log(res)
     this.userObj = res.data.data
@@ -63,7 +63,7 @@ export default {
     this.SET_USERPHOTO(this.userObj.photo)
     console.log('激活')
   },
-  data () {
+  data() {
     return {
       userObj: {} // 用户对象
     }
@@ -73,17 +73,19 @@ export default {
     // 退出登陆
     // 主动退出->用户点击退出，清空token，强制repalce切换登录页
     // 被动退出->把token值传后台，后台返回401->响应拦截器发现401状态证明身份过去->强制进登录页
-    quitFn () {
+    quitFn() {
       Dialog.confirm({
         title: '是否退出登陆',
         message: '这就走了？'
       })
-        .then(() => { // 用户点击"确认"选项->内部resolve触发then
+        .then(() => {
+          // 用户点击"确认"选项->内部resolve触发then
           // on confirm
           removeToken()
           this.$router.replace('/login')
         })
-        .catch(() => { // 用户点击"取消"选项->内部reject触发catch
+        .catch(() => {
+          // 用户点击"取消"选项->内部reject触发catch
           // on cancel
         })
     }

@@ -3,22 +3,43 @@
     <van-nav-bar title="黑马头条-登陆" />
     <div>
       <van-form @submit="onSubmit">
-        <van-field v-model="user.mobile"
-        required name="mobile" label="手机号"
-        placeholder="请输入11位手机号"
-        :rules="[{ required: true, message: '请填写正确的手机号',pattern:/^1[3-9]\d{9}$/ }]" />
-        <van-field v-model="user.code"
-        required type="password"
-        name="code" label="密码"
-        placeholder="请输入6位密码"
-        :rules="[{ required: true, message: '请填写正确的密码',pattern:/^\d{6}$/ }]" />
+        <van-field
+          v-model="user.mobile"
+          required
+          name="mobile"
+          label="手机号"
+          placeholder="请输入11位手机号"
+          :rules="[
+            {
+              required: true,
+              message: '请填写正确的手机号',
+              pattern: /^1[3-9]\d{9}$/
+            }
+          ]"
+        />
+        <van-field
+          v-model="user.code"
+          required
+          type="password"
+          name="code"
+          label="密码"
+          placeholder="请输入6位密码"
+          :rules="[
+            { required: true, message: '请填写正确的密码', pattern: /^\d{6}$/ }
+          ]"
+        />
         <div style="margin: 16px">
           <!-- 属性不给值默认为ture -->
-          <van-button round block type="info"
-           native-type="submit"
-           :loading = "isLoading"
-           :disabled = "isLoading"
-           loading-text="登陆中...">登陆</van-button>
+          <van-button
+            round
+            block
+            type="info"
+            native-type="submit"
+            :loading="isLoading"
+            :disabled="isLoading"
+            loading-text="登陆中..."
+            >登陆</van-button
+          >
         </div>
       </van-form>
     </div>
@@ -31,7 +52,7 @@ import Notify from '@/ui/Notify'
 import { setToken } from '@/utils/token'
 import { setStorage } from '@/utils/storage'
 export default {
-  data () {
+  data() {
     return {
       user: {
         mobile: '13811111111', // 手机号
@@ -41,7 +62,7 @@ export default {
     }
   },
   methods: {
-    async onSubmit () {
+    async onSubmit() {
       this.isLoading = true // 网络请求正在加载
       try {
         const res = await loginAPI(this.user)

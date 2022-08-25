@@ -8,7 +8,7 @@ import 'dayjs/locale/zh' // 集成中文
  * @returns 系统时间到之前指定时间的距离值
  */
 
-export const timeAgo = (targetTime) => {
+export const timeAgo = targetTime => {
   // 格式化时间
   dayjs.extend(relativeTime)
   dayjs.locale('zh')
@@ -16,6 +16,6 @@ export const timeAgo = (targetTime) => {
   const b = dayjs(targetTime)
   return a.to(b) // 返回多久之前...
 }
-export const formatDate = (dateObj) => {
+export const formatDate = dateObj => {
   return dayjs(dateObj).format('YYYY-MM-DD')
 }

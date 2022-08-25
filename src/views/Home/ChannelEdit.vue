@@ -3,26 +3,41 @@
     <!-- 弹出层的头部区域 -->
     <van-nav-bar title="频道管理">
       <template #right>
-        <van-icon name="cross" size="0.37333334rem" color="white" @click="closeFn"/>
+        <van-icon
+          name="cross"
+          size="0.37333334rem"
+          color="white"
+          @click="closeFn"
+        />
       </template>
     </van-nav-bar>
     <!-- 我的频道 -->
     <div class="my-channel-box">
       <div class="channel-title">
-        <span>我的频道
+        <span
+          >我的频道
           <span class="small-title">
-            点击{{ isEdit ? '删除' : '进入'}}频道
+            点击{{ isEdit ? '删除' : '进入' }}频道
           </span>
         </span>
-        <span @click="editFn">{{ isEdit ? '完成' : '编辑'}}</span>
+        <span @click="editFn">{{ isEdit ? '完成' : '编辑' }}</span>
       </div>
       <!-- 我的频道列表 -->
       <van-row type="flex">
-        <van-col span="6" v-for="obj in userList" :key="obj.id" @click="userChannelClickFn(obj)">
+        <van-col
+          span="6"
+          v-for="obj in userList"
+          :key="obj.id"
+          @click="userChannelClickFn(obj)"
+        >
           <div class="channel-item van-hairline--surround">
-            {{obj.name}}
+            {{ obj.name }}
             <!-- 删除的徽标 -->
-            <van-badge color="transparent" class="cross-badge" v-show="isEdit && obj.id != 0">
+            <van-badge
+              color="transparent"
+              class="cross-badge"
+              v-show="isEdit && obj.id != 0"
+            >
               <template #content>
                 <van-icon
                   name="cross"
@@ -44,8 +59,13 @@
       </div>
       <!-- 更多频道列表 -->
       <van-row type="flex">
-        <van-col span="6" v-for="obj in unCheckList" :key="obj.id" @click="moreFn(obj)">
-          <div class="channel-item van-hairline--surround">{{obj.name}}</div>
+        <van-col
+          span="6"
+          v-for="obj in unCheckList"
+          :key="obj.id"
+          @click="moreFn(obj)"
+        >
+          <div class="channel-item van-hairline--surround">{{ obj.name }}</div>
         </van-col>
       </van-row>
     </div>
@@ -66,29 +86,33 @@ export default {
     userList: Array,
     unCheckList: Array
   },
-  data () {
+  data() {
     return {
       isEdit: false
     }
   },
   methods: {
     // 编辑->点击事件
-    editFn () {
+    editFn() {
       this.isEdit = !this.isEdit
     },
     // 更多频道->点击事件
-    moreFn (channelObj) {
-      if (this.isEdit === true) { // 处于编辑状态
+    moreFn(channelObj) {
+      if (this.isEdit === true) {
+        // 处于编辑状态
         this.$emit('addChannelEV', channelObj)
       }
     },
     // 用户选择频道-点击事件
-    userChannelClickFn (channelObj) {
-      if (this.isEdit === true) { // 处于编辑状态->执行删除功能
-        if (channelObj.id !== 0) { // 推荐频道不能删除
+    userChannelClickFn(channelObj) {
+      if (this.isEdit === true) {
+        // 处于编辑状态->执行删除功能
+        if (channelObj.id !== 0) {
+          // 推荐频道不能删除
           this.$emit('removeChannelEV', channelObj)
         }
-      } else { // 切换到点击的频道
+      } else {
+        // 切换到点击的频道
         this.$emit('closeEV') // 关闭弹出层
         // 触发v-model绑定的input事件
         // 把值传出去绑定给v-model对应的vue变量
@@ -96,7 +120,7 @@ export default {
       }
     },
     // 关闭弹出层
-    closeFn () {
+    closeFn() {
       this.$emit('closeEV')
       // this.isEdit = false
     }

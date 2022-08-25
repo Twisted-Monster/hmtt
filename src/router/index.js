@@ -26,7 +26,7 @@ const routes = [
     path: '/login',
     component: () => import(/* webpackChunkName: "Login" */ '@/views/Login'),
     // 路由独享守卫
-    beforeEnter (to, from, next) {
+    beforeEnter(to, from, next) {
       // 如果已经登陆了，不要切换到登录页面
       if (getToken()?.length > 0 && to.path === '/login') {
         // next(false) // 留在原地,原理是跳到login后再跳回当前页面，会使当前页面的返回失效
@@ -68,18 +68,27 @@ const routes = [
   // 搜索结果页
   {
     path: '/search_result/:kw',
-    component: () => import(/* webpackChunkName: "SearchResult" */ '@/views/Search/SearchResult')
+    component: () =>
+      import(
+        /* webpackChunkName: "SearchResult" */ '@/views/Search/SearchResult'
+      )
   },
   // 文章详情页
   {
     path: '/detail',
-    component: () => import(/* webpackChunkName: "ArticleDetailDetail" */ '@/views/ArticleDetail')
+    component: () =>
+      import(
+        /* webpackChunkName: "ArticleDetailDetail" */ '@/views/ArticleDetail'
+      )
   },
-  { // 用户编辑页面
+  {
+    // 用户编辑页面
     path: '/user_edit',
-    component: () => import(/* webpackChunkName: "UserEdit" */ '@/views/User/UserEdit')
+    component: () =>
+      import(/* webpackChunkName: "UserEdit" */ '@/views/User/UserEdit')
   },
-  { // 聊天页面
+  {
+    // 聊天页面
     path: '/chat',
     component: () => import(/* webpackChunkName: "Chat" */ '@/views/Chat')
   }

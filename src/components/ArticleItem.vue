@@ -6,16 +6,27 @@
       <template #title>
         <div class="title-box">
           <!-- 标题 -->
-          <span>{{artObj.title}}</span>
+          <span>{{ artObj.title }}</span>
           <!-- 单图 -->
-          <img v-if="artObj.cover.type === 1" v-lazy="artObj.cover.images[0]" alt="" class="thumb">
+          <img
+            v-if="artObj.cover.type === 1"
+            v-lazy="artObj.cover.images[0]"
+            alt=""
+            class="thumb"
+          />
           <!-- <van-image v-if="artObj.cover.type === 1" :src="artObj.cover.images[0]" alt="" class="thumb">
             <template v-slot:error>加载失败</template>
           </van-image> -->
         </div>
         <!-- 多图 -->
         <div class="thumb-box" v-if="artObj.cover.type > 1">
-          <img v-lazy="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
+          <img
+            v-lazy="imgUrl"
+            alt=""
+            class="thumb"
+            v-for="(imgUrl, index) in artObj.cover.images"
+            :key="index"
+          />
           <!-- <van-image :src="imgUrl" alt="" class="thumb" v-for="(imgUrl,index) in artObj.cover.images" :key="index">
             <template v-slot:error>加载失败</template>
           </van-image> -->
@@ -25,9 +36,9 @@
       <template #label>
         <div class="label-box">
           <div>
-            <span>{{artObj.aut_name}}</span>
-            <span>{{artObj.comm_count}}</span>
-            <span>{{formateTime(artObj.pubdate)}}</span>
+            <span>{{ artObj.aut_name }}</span>
+            <span>{{ artObj.comm_count }}</span>
+            <span>{{ formateTime(artObj.pubdate) }}</span>
           </div>
           <!-- 反馈按钮 -->
           <!-- @click.stop阻止点击事件冒泡到父级执行跳转 -->
@@ -37,7 +48,15 @@
     </van-cell>
     <!-- 反馈面板 -->
     <!-- 弹出层默认挂载到组件所在位置，可以通过 get-container 属性指定挂载位置。 -->
-    <van-action-sheet v-model="show" :actions="actions" @select="onSelect" @cancel="cancelFn" @close="closeFn" get-container="body" :cancel-text="bottomText" />
+    <van-action-sheet
+      v-model="show"
+      :actions="actions"
+      @select="onSelect"
+      @cancel="cancelFn"
+      @close="closeFn"
+      get-container="body"
+      :cancel-text="bottomText"
+    />
   </div>
 </template>
 
@@ -52,7 +71,8 @@ import { firstActions, secondActions } from '@/api/reports'
 export default {
   props: {
     artObj: Object, // 文章对象
-    isShow: { // 控制x是否显示
+    isShow: {
+      // 控制x是否显示
       type: Boolean,
       default: true // 首页之类的地方不想再做修改，首页没传值进来所以默认显示
     }
@@ -60,7 +80,7 @@ export default {
   methods: {
     formateTime: timeAgo, // 函数体是timeago
     // 反馈面板-"选项"选择事件
-    onSelect (action) {
+    onSelect(action) {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       if (action.name === '反馈垃圾内容') {
@@ -70,14 +90,15 @@ export default {
         // 子向父传值
         this.$emit('dislike', this.artObj)
         this.show = false // 关闭弹窗
-      } else { // 这里就是二级反馈
+      } else {
+        // 这里就是二级反馈
         this.$emit('report', this.artObj, action.value) // 外面需要反馈类型的值
         this.actions = firstActions
         this.show = false
       }
     },
     // 反馈面板-底部按钮-点击事件
-    cancelFn () {
+    cancelFn() {
       if (this.bottomText === '返回') {
         this.show = true
         this.actions = firstActions
@@ -85,12 +106,12 @@ export default {
       }
     },
     // 反馈面板-关闭面板-触发事件
-    closeFn () {
+    closeFn() {
       this.actions = firstActions
       this.bottomText = '取消'
     }
   },
-  data () {
+  data() {
     return {
       show: false, // 折叠面板显示或隐藏
       actions: firstActions,
@@ -116,11 +137,11 @@ export default {
 }
 
 /* 文章信息span */
-.label-box span{
-    margin: 0 3px;
-    &:first-child{
-        margin-left: 0;
-    }
+.label-box span {
+  margin: 0 3px;
+  &:first-child {
+    margin-left: 0;
+  }
 }
 
 /* 图片的样式, 矩形黄金比例：0.618 */

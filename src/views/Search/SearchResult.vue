@@ -3,19 +3,33 @@
     <!-- 搜索结果页-头部导航 -->
     <div class="search-result-container">
       <!-- 点击实现后退效果 -->
-      <van-nav-bar title="搜索结果" left-arrow @click-left="$router.go(-1)" fixed />
+      <van-nav-bar
+        title="搜索结果"
+        left-arrow
+        @click-left="$router.go(-1)"
+        fixed
+      />
     </div>
+
     <!-- 文章列表 -->
     <div>
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :immediate-check="false"
+      >
         <!-- ArticleItem是组件, 包括Vant的都是组件, 组件身上的事件都是自定义事件(别看是叫click)
              组件内需要$emit('click')才会执行
              解决: 给组件绑定原生的点击事件@click.native  (使用修饰符) -->
         <ArticleItem
-        v-for="obj in articleList"
-        :key="obj.art_id" :artObj="obj"
-        :isShow="false"
-        @click.native="itemClickFn(obj.art_id)"></ArticleItem>
+          v-for="obj in articleList"
+          :key="obj.art_id"
+          :artObj="obj"
+          :isShow="false"
+          @click.native="itemClickFn(obj.art_id)"
+        ></ArticleItem>
       </van-list>
     </div>
   </div>
@@ -26,7 +40,7 @@ import ArticleItem from '@/components/ArticleItem'
 import { searchResultAPI } from '@/api'
 export default {
   name: 'SearchResult',
-  data () {
+  data() {
     return {
       page: 1, // 页码
       articleList: [], // 文章列表
@@ -37,7 +51,7 @@ export default {
   components: {
     ArticleItem
   },
-  async created () {
+  async created() {
     const res = await searchResultAPI({
       page: this.page,
       q: this.$route.params.kw
@@ -46,7 +60,7 @@ export default {
     this.articleList = res.data.data.results
   },
   methods: {
-    async onLoad () {
+    async onLoad() {
       this.page++
       const res = await searchResultAPI({
         page: this.page,
@@ -62,7 +76,7 @@ export default {
       this.loading = false
     },
     // 跳转到详情
-    itemClickFn (id) {
+    itemClickFn(id) {
       this.$router.push({
         path: `/detail?art_id=${id}`
       })

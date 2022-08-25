@@ -1,30 +1,39 @@
 <template>
   <div class="container">
     <!-- 固定导航 -->
-    <van-nav-bar fixed left-arrow @click-left="$router.back()" title="人工智障"></van-nav-bar>
+    <van-nav-bar
+      fixed
+      left-arrow
+      @click-left="$router.back()"
+      title="人工智障"
+    ></van-nav-bar>
 
     <!-- 聊天主体区域 -->
     <div class="chat-list">
-      <div v-for="(obj,index) in list" :key="index">
-          <!-- 左侧是机器人小思 -->
-          <div class="chat-item left" v-if="obj.name !== 'me'">
-            <van-image fit="cover" round src="https://img.yzcdn.cn/vant/cat.jpeg" />
-            <div class="chat-pao">{{obj.msg}}</div>
-          </div>
+      <div v-for="(obj, index) in list" :key="index">
+        <!-- 左侧是机器人小思 -->
+        <div class="chat-item left" v-if="obj.name !== 'me'">
+          <van-image
+            fit="cover"
+            round
+            src="https://img.yzcdn.cn/vant/cat.jpeg"
+          />
+          <div class="chat-pao">{{ obj.msg }}</div>
+        </div>
 
-          <!-- 右侧是当前用户 -->
-          <div class="chat-item right" v-else>
-            <div class="chat-pao">{{obj.msg}}</div>
-            <van-image fit="cover" round :src="$store.state.userPhoto" />
-          </div>
-       </div>
+        <!-- 右侧是当前用户 -->
+        <div class="chat-item right" v-else>
+          <div class="chat-pao">{{ obj.msg }}</div>
+          <van-image fit="cover" round :src="$store.state.userPhoto" />
+        </div>
+      </div>
     </div>
 
     <!-- 对话区域 -->
     <div class="reply-container van-hairline--top">
       <van-field v-model="word" placeholder="说点什么...">
         <template #button>
-          <span  style="font-size:12px;color:#999" @click="sendFn">提交</span>
+          <span style="font-size: 12px; color: #999" @click="sendFn">提交</span>
         </template>
       </van-field>
     </div>
@@ -36,7 +45,7 @@ import { io } from 'socket.io-client'
 import { getToken } from '@/utils/token'
 export default {
   name: 'Chat',
-  data () {
+  data() {
     return {
       word: '', // 输入框的内容
       // 所有的聊天消息
@@ -48,7 +57,7 @@ export default {
       socket: null // 用户和服务器建立连接的socket对象
     }
   },
-  created () {
+  created() {
     // 创建客户端 websocket 的实例
     this.socket = io('http://geek.itheima.net', {
       query: {
@@ -76,7 +85,7 @@ export default {
   },
   methods: {
     // 发送span--点击事件
-    sendFn () {
+    sendFn() {
       if (this.word.trim().length === 0) return
       // emit触发socket封装的message事件，发送消息给后台
       this.socket.emit('message', {
@@ -96,7 +105,7 @@ export default {
       this.word = ''
     }
   },
-  destroyed () {
+  destroyed() {
     this.socket.close()
     this.socket = null
   }
